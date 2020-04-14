@@ -7,13 +7,14 @@ template.
 If Python and Arcade are installed, this example can be run from
 the command line with: python -m arcade.examples.starting_template
 """
+# Standard Library
 from math import sqrt
 import os
 from pathlib import Path
 import random
 
+# Third Party
 from pyglet import gl
-
 import arcade
 
 SCREEN_WIDTH = 800
@@ -105,7 +106,10 @@ class Player(arcade.Sprite):
         if self.change_x < 0 and self.character_face_direction == RIGHT_FACING:
             self.character_face_direction = LEFT_FACING
 
-        elif (self.change_x > 0) and (self.character_face_direction == LEFT_FACING):
+        elif (
+                self.change_x > 0 and
+                self.character_face_direction == LEFT_FACING
+             ):
             self.character_face_direction = RIGHT_FACING
 
         # Idle animation
@@ -137,15 +141,24 @@ class Player(arcade.Sprite):
         # elif self.top > SCREEN_HEIGHT - 50:
         #     self.top = SCREEN_HEIGHT - 50
 
-        pad = 5
+        pad = 5  # Padding to detect player close to the goto position
 
-        if self.goto_x in range(int(self.center_x-pad), int(self.center_x+pad)) and self.goto_y in range(int(self.bottom-pad), int(self.bottom)+pad):
+        if (
+            self.goto_x in range(
+                int(self.center_x-pad), int(self.center_x+pad)) and
+            self.goto_y in range(
+                int(self.bottom-pad), int(self.bottom)+pad)
+        ):
+            # If character near the goto position, stop the character
             self.change_x = 0
             self.change_y = 0
 
         if DEBUG:
-            print(f"goto:{self.goto_x, self.goto_y} center:{int(self.center_x), int(self.center_y)}")
-            print(f"x:{self.change_x} y:{self.change_y}")
+            print(
+                 f"goto:{self.goto_x, self.goto_y} "
+                 f"center:{int(self.center_x),int(self.center_y)}\n"
+                 f"x:{self.change_x} y:{self.change_y}"
+                 )
 
     def draw(self, **kwargs):
         """ Draw the sprite. """
@@ -224,11 +237,15 @@ class Inventory(arcade.SpriteList):
         if len(self.items) <= 8:
             self.items_visible = self.items_ordered
         else:
-            self.items_visible = self.items_ordered[self.visible_rows[0]:self.visible_rows[1]+1]
+            self.items_visible = self.items_ordered[
+                self.visible_rows[0]:self.visible_rows[1]+1
+                ]
 
         for row in range(0, len(self.items_visible)):
             for item in self.items_visible[row]:
-                item.center_x, item.center_y = (self.items_visible[row].index(item)*80+50, row*-80+130)
+                item.center_x, item.center_y = (
+                    self.items_visible[row].index(item)*80+50, row*-80+130
+                )
 
         for row in range(0, len(self.items_ordered)):
             for item in self.items_ordered[row]:
@@ -239,7 +256,8 @@ class Inventory(arcade.SpriteList):
         if direction == 'up' and self.row_index > 0:
             print("Changed the row index (-1)")
             self.row_index -= 1
-        elif direction == 'down' and self.row_index < len(self.items_ordered) - 2:
+        elif (direction == 'down' and
+                self.row_index < len(self.items_ordered) - 2):
             print("Changed the row index (+1)")
             self.row_index += 1
         print(self.row_index)
@@ -319,8 +337,6 @@ class MyGame(arcade.Window):
         '''
         self.rooms = []
 
-        items = arcade.SpriteList()
-
         self.rooms.append(
             Room('Start', 0, resource_path / 'level00.png', 0.45))
 
@@ -357,7 +373,9 @@ class MyGame(arcade.Window):
         self.player_sprite.center_y = 300
         self.level_sprites.append(self.player_sprite)
 
-        self.current_cursor = arcade.Sprite(resource_path / 'cursor/default.png', 0.5)
+        self.current_cursor = arcade.Sprite(
+            resource_path / 'cursor/default.png', 0.5)
+
         self.cursor_texture_list = [
             arcade.load_texture(
                 resource_path / f"cursor/{i}.png") for i in (
@@ -392,14 +410,20 @@ class MyGame(arcade.Window):
 
         self.level_sprites.append(book)
 
-        rand_items = (
-            ('book', "It's a book.", resource_path / "book.png", 1),
-            ('key', "It's a key. It opens stuff.", resource_path / "key.png", 1),
-            ('firearm', "It's a gun. You should probably run.", resource_path / "firearm.png", 2.5),
-            ('brick', "It's a block of cocaine. Nifty.", resource_path / "brick.png", 2.5),
-            ("Hammer", "It's hammer time.", resource_path / "hammer.png", 2.5),
-            ('sword', "It's a sword.", resource_path / "sword.png", 1),
-        )
+        # rand_items = (
+        #     ('book', "It's a book.",
+        #         resource_path / "book.png", 1),
+        #     ('key', "It's a key. It opens stuff.",
+        #         resource_path / "key.png", 1),
+        #     ('firearm', "It's a gun. You should probably run.",
+        #         resource_path / "firearm.png", 2.5),
+        #     ('brick', "It's a block of cocaine. Nifty.",
+        #         resource_path / "brick.png", 2.5),
+        #     ("Hammer", "It's hammer time.",
+        #         resource_path / "hammer.png", 2.5),
+        #     ('sword', "It's a sword.",
+        #         resource_path / "sword.png", 1),
+        # )
 
         # for i in range(20):
         #     item = random.choice(rand_items)
@@ -412,12 +436,14 @@ class MyGame(arcade.Window):
         self.inventory_arrows = arcade.SpriteList()
 
         self.inventory_arrows.append(
-            arcade.Sprite(resource_path / 'ui/arrow_up.png', 4,
-            center_x=725, center_y=125))
+            arcade.Sprite(
+                resource_path / 'ui/arrow_up.png', 4,
+                center_x=725, center_y=125))
 
         self.inventory_arrows.append(
-            arcade.Sprite(resource_path / 'ui/arrow_down.png', 4,
-            center_x=725, center_y=50))
+            arcade.Sprite(
+                resource_path / 'ui/arrow_down.png', 4,
+                center_x=725, center_y=50))
 
         self.level_sprites.append(
             Item(
@@ -486,7 +512,10 @@ class MyGame(arcade.Window):
         self.current_cursor.draw()
 
         if DEBUG:
-            arcade.draw_circle_outline(self.player_sprite.center_x, self.player_sprite.center_y, 200, arcade.csscolor.RED, 2, 30)
+            arcade.draw_circle_outline(
+                self.player_sprite.center_x, self.player_sprite.center_y,
+                200, arcade.csscolor.RED, 2, 30
+            )
 
         # Call draw() on all your sprite lists below
 
@@ -514,25 +543,31 @@ class MyGame(arcade.Window):
             else:
                 sprite.Z_INDEX = -1
 
-
-        self.level_sprites = sorted(self.level_sprites, key=lambda x: x.Z_INDEX)
-
+        self.level_sprites = sorted(
+            self.level_sprites, key=lambda x: x.Z_INDEX
+        )
 
         # TODO Move to on_mouse_release
-        if self.player_sprite.center_x > 790 and self.player_sprite.center_y < 350:
+        if (self.player_sprite.center_x > 790 and
+                self.player_sprite.center_y < 350):
+
             self.room = self.rooms[1]
             self.room.clickable_area = [range(0, 800), range(0, 600)]
             self.player_sprite.set_position(60, 300)
-            # self.player_sprite.goto_x, self.player_sprite.goto_y = self.player_sprite._get_position()
+            # self.player_sprite.goto_x,
+            # self.player_sprite.goto_y = self.player_sprite._get_position()
             self.player_sprite.change_x = 0
             self.player_sprite.change_y = 0
             self.player_sprite.scale = 1.5
 
             # TODO BUG Items being removed from inventory
-            for item in self.level_sprites:
-                if item is not self.player_sprite and not item.IN_INVENTORY:
-                    self.level_sprites.remove(item)
-                    print(self.level_sprites)
+            self.level_sprites = [self.player_sprite]
+
+            for item in self.room.items:
+                self.level_sprites.append(item)
+
+            for item in self.inventory.items:
+                self.level_sprites.append(item)
 
     def on_key_press(self, key, key_modifiers):
         """
@@ -600,7 +635,6 @@ class MyGame(arcade.Window):
         """
         Called when a user releases a mouse button.
         """
-        pad = 10  # Padding for the item click detection
 
         self.x = x
         self.y = y
@@ -609,19 +643,16 @@ class MyGame(arcade.Window):
         right_click = button == arcade.MOUSE_BUTTON_RIGHT
         middle_click = button == arcade.MOUSE_BUTTON_MIDDLE
 
-        move_cursor = self.current_cursor.textures[0]
+        # move_cursor = self.current_cursor.textures[0]
         use_cursor = self.current_cursor.textures[2]
         examine_cursor = self.current_cursor.textures[1]
 
-        is_move_cursor = self.current_cursor.texture == move_cursor
+        # is_move_cursor = self.current_cursor.texture == move_cursor
         is_use_cursor = self.current_cursor.texture == use_cursor
         is_examine_cursor = self.current_cursor.texture == examine_cursor
 
-        # if left_click:
-        #     self.current_cursor.set_texture(0)
-        #     self.current_cursor.scale = 0.5
-
-        if (right_click and is_examine_cursor) or (middle_click and is_use_cursor):
+        if (right_click and is_examine_cursor or
+                middle_click and is_use_cursor):
             self.current_cursor.set_texture(0)
             self.current_cursor.scale = 0.5
 
@@ -643,11 +674,6 @@ class MyGame(arcade.Window):
 
             sprite_x_values = range(min(sprite_x_values), max(sprite_x_values))
             sprite_y_values = range(min(sprite_y_values), max(sprite_y_values))
-
-            pad = 100
-
-            pickup_x_range = range(int(sprite.center_x)-pad, int(sprite.center_x)+pad)
-            pickup_y_range = range(int(sprite.center_x)-pad, int(sprite.center_x)+pad)
 
             distance_x = self.player_sprite.center_x - x
             distance_y = self.player_sprite.bottom - y
@@ -678,7 +704,11 @@ class MyGame(arcade.Window):
                     # self.current_cursor.set_texture(1)
                     break
         else:
-            if left_click and int(x) in tuple(self.room.clickable_area[0]) and int(y) in tuple(self.room.clickable_area[1]):
+            if (
+                    left_click
+                    and int(x) in tuple(self.room.clickable_area[0])
+                    and int(y) in tuple(self.room.clickable_area[1])
+            ):
                 self.current_cursor.set_texture(0)
                 self.current_cursor.scale = 0.5
                 if DEBUG:
@@ -713,7 +743,7 @@ class MyGame(arcade.Window):
                     print("Clicked the down arrow!")
                     self.inventory.arrow('down')
 
-        # # Inventory items
+        # # TODO Inventory items
         # for item in self.inventory:
         #     x_range = range(item.center_x-pad, item.center_x+pad)
         #     y_range = range(item.center_y-pad, item.center_y+pad)
@@ -722,7 +752,9 @@ class MyGame(arcade.Window):
         #         pass
         #
         # else:
-        #     if item not in self.level_sprites and button is not arcade.MOUSE_BUTTON_MIDDLE and int(y) > 150:
+        #     if (item not in self.level_sprites
+        #             and button is not arcade.MOUSE_BUTTON_MIDDLE
+        #             and int(y) > 150):
         #         self.current_cursor.set_texture(0)
         #         if DEBUG:
         #             print("Moving to mouse position!")
