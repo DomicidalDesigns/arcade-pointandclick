@@ -34,10 +34,11 @@ LEFT_FACING = 1
 DEBUG = False
 # DEBUG = True
 
-# Resources path
-project_path = Path(os.path.dirname(__file__))
-# TODO create 'resource' main directory and 'sound', 'sprite' subdirectories
-resource_path = project_path / "img"
+# File paths for project and resources
+path = {}
+path['project'] = Path(os.path.dirname(__file__))
+path['resources'] = path['project'] / "resources"
+path['img'] = path['resources'] / "img"
 
 
 def load_texture_pair(filename):
@@ -84,12 +85,12 @@ class Player(arcade.Sprite):
         # main_path = f"{kenney_path}robot/robot"
 
         # Load textures for idle standing
-        self.run_texture_pair = load_texture_pair(resource_path / "6.png")
+        self.run_texture_pair = load_texture_pair(path['img'] / "6.png")
 
         # Load textures for walking
         self.run_textures = []
         for i in range(1, 15):
-            texture = load_texture_pair(resource_path / f"{i}.png")
+            texture = load_texture_pair(path['img'] / f"{i}.png")
             self.run_textures.append(texture)
 
         # Set the initial texture
@@ -338,10 +339,10 @@ class MyGame(arcade.Window):
         self.rooms = []
 
         self.rooms.append(
-            Room('Start', 0, resource_path / 'level00.png', 0.45))
+            Room('Start', 0, path['img'] / 'level00.png', 0.45))
 
         self.rooms.append(
-            Room('Level 1', 1, resource_path / 'level01.png', 0.45))
+            Room('Level 1', 1, path['img'] / 'level01.png', 0.45))
 
         self.room = self.rooms[0]
 
@@ -361,7 +362,7 @@ class MyGame(arcade.Window):
         # Sprites
 
         self.level_backgrounds.append(
-            arcade.Sprite(resource_path / 'level00.png', 0.45),
+            arcade.Sprite(path['img'] / 'level00.png', 0.45),
             )
         # self.level_backgrounds[0].width = 800
         self.level_backgrounds[0].bottom = 150
@@ -374,11 +375,11 @@ class MyGame(arcade.Window):
         self.level_sprites.append(self.player_sprite)
 
         self.current_cursor = arcade.Sprite(
-            resource_path / 'cursor/default.png', 0.5)
+            path['img'] / 'cursor/default.png', 0.5)
 
         self.cursor_texture_list = [
             arcade.load_texture(
-                resource_path / f"cursor/{i}.png") for i in (
+                path['img'] / f"cursor/{i}.png") for i in (
                 'examine', 'use', 'use_examine', )]
 
         for texture in self.cursor_texture_list:
@@ -400,7 +401,7 @@ class MyGame(arcade.Window):
         self.set_mouse_visible(False)
 
         book = Item(
-            resource_path / 'book.png', 1, 'book',
+            path['img'] / 'book.png', 1, 'book',
             "It's a book. What else can I tell you?",
             [
                 random.randint(0, 500),
@@ -412,17 +413,17 @@ class MyGame(arcade.Window):
 
         # rand_items = (
         #     ('book', "It's a book.",
-        #         resource_path / "book.png", 1),
+        #         path['img'] / "book.png", 1),
         #     ('key', "It's a key. It opens stuff.",
-        #         resource_path / "key.png", 1),
+        #         path['img'] / "key.png", 1),
         #     ('firearm', "It's a gun. You should probably run.",
-        #         resource_path / "firearm.png", 2.5),
+        #         path['img'] / "firearm.png", 2.5),
         #     ('brick', "It's a block of cocaine. Nifty.",
-        #         resource_path / "brick.png", 2.5),
+        #         path['img'] / "brick.png", 2.5),
         #     ("Hammer", "It's hammer time.",
-        #         resource_path / "hammer.png", 2.5),
+        #         path['img'] / "hammer.png", 2.5),
         #     ('sword', "It's a sword.",
-        #         resource_path / "sword.png", 1),
+        #         path['img'] / "sword.png", 1),
         # )
 
         # for i in range(20):
@@ -437,23 +438,23 @@ class MyGame(arcade.Window):
 
         self.inventory_arrows.append(
             arcade.Sprite(
-                resource_path / 'ui/arrow_up.png', 4,
+                path['img'] / 'ui/arrow_up.png', 4,
                 center_x=725, center_y=125))
 
         self.inventory_arrows.append(
             arcade.Sprite(
-                resource_path / 'ui/arrow_down.png', 4,
+                path['img'] / 'ui/arrow_down.png', 4,
                 center_x=725, center_y=50))
 
         self.level_sprites.append(
             Item(
-                resource_path / 'tires.png', 0.45, 'Tires',
+                path['img'] / 'tires.png', 0.45, 'Tires',
                 "It's just a pile of tires...weirdo.",
                 [700, 300], False, 0)
             )
         self.level_sprites.append(
             Item(
-                resource_path / 'hydrant.png', 0.45, 'Fire hydrant',
+                path['img'] / 'hydrant.png', 0.45, 'Fire hydrant',
                 "Y'know, for dogs to piss on.",
                 [300, 320], False, 0)
             )
