@@ -35,9 +35,8 @@ DEBUG = False
 
 # Resources path
 project_path = Path(os.path.dirname(__file__))
+# TODO create 'resource' main directory and 'sound', 'sprite' subdirectories
 resource_path = project_path / "img"
-
-print(resource_path)
 
 
 def load_texture_pair(filename):
@@ -82,7 +81,6 @@ class Player(arcade.Sprite):
         # main_path = f"{kenney_path}male_adventurer/maleAdventurer"
         # main_path = f"{kenney_path}zombie/zombie"
         # main_path = f"{kenney_path}robot/robot"
-
 
         # Load textures for idle standing
         self.run_texture_pair = load_texture_pair(resource_path / "6.png")
@@ -252,7 +250,7 @@ class Room():
     '''
     Room Class
     '''
-    def __init__(self, name, number, filename, scale,):
+    def __init__(self, name, number, filename, scale):
         self.name = name
         self.number = number
         self.items = arcade.SpriteList()
